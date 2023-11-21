@@ -9,7 +9,7 @@ export interface Guardian {
 
 export interface UserName {
   fName: string;
-  middleName: string;
+  middleName?: string;
   lname: string;
 }
 
@@ -22,8 +22,8 @@ export interface LocalGuardian {
 export interface Student {
   id: number;
   name: UserName;
-  gender: 'male' | 'female';
-  dataOfBirth: string;
+  gender: 'male' | 'female' | 'other';
+  dateOfBirth: string;
   email: string;
   avatar?: string;
   contactNumber: string;

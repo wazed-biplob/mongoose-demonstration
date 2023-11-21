@@ -1,15 +1,39 @@
 import { Schema, model } from 'mongoose';
+import validator from 'validator';
+
 import {
   Guardian,
   LocalGuardian,
   Student,
   UserName,
 } from './students.interface';
+import { optional } from 'joi';
 
+// mongoose
 const usernameSchema = new Schema<UserName>({
-  fName: { type: String, required: [true, 'First Name is required'] },
+  fName: {
+    type: String,
+    trim: true,
+    maxlength: [20, 'Maximum 20 Characters Allowed'],
+    required: [true, 'First Name is required'],
+    validate: {
+      validator: function (value: string) {
+        const fName =
+          value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        return fName === value;
+      },
+      message: '{VALUE} should be written correctly',
+    },
+  },
   middleName: { type: String },
-  lname: { type: String, required: true },
+  lname: {
+    type: String,
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: 'No Number Allowed',
+    },
+    required: true,
+  },
 });
 
 const guadianSchema = new Schema<Guardian>({
@@ -33,13 +57,21 @@ const studentSchema = new Schema<Student>({
   gender: {
     type: String,
     enum: {
-      values: ['male', 'female'],
+      values: ['male', 'female', 'other'],
       message: '{VALUE} is not valid',
     },
     required: true,
   },
-  dataOfBirth: { type: String },
-  email: { type: String, required: true, unique: true },
+  dateOfBirth: { type: String, required: true },
+  email: {
+    type: String,
+    validate: {
+      validator: (value: string) => validator.isEmail(value),
+      message: 'Provide Valid Email Address',
+    },
+    required: true,
+    unique: true,
+  },
   contactNumber: { type: String, required: true },
   emergencyContact: { type: String, required: true },
   bloodgroup: {
