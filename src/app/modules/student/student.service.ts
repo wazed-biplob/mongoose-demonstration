@@ -1,18 +1,28 @@
-import { StudentModel } from './student.model';
-import { Student } from './students.interface';
+import { Student } from './student.model';
+import { TStudent } from './students.interface';
 
-const createStudent = async (student: Student) => {
-  const result = await StudentModel.create(student);
+const createStudent = async (studentData: TStudent) => {
+  // built-in static method which is 'create'
+  // const result = await StudentModel.create(studentData);
+
+  // creates an instance
+  const student = new Student(studentData);
+  if (await student.userExists(studentData.id)) {
+    throw new Error('User Already Exists');
+  }
+
+  // built-in instance method provided by mongoose
+  const result = await student.save();
   return result;
 };
 
 const getStudents = async () => {
-  const result = await StudentModel.find();
+  const result = await Student.find();
   return result;
 };
 
 const getStudentById = async (id: string) => {
-  const result = await StudentModel.findOne({ id: id });
+  const result = await Student.findOne({ id: id });
   return result;
 };
 export const studentServices = {
