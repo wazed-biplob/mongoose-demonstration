@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
+import bcrypt from 'bcrypt';
 
 import {
   TGuardian,
@@ -9,6 +10,7 @@ import {
   StudentModel,
   TUserName,
 } from './students.interface';
+import config from '../../config';
 // import { optional } from 'joi';
 
 // mongoose
@@ -55,7 +57,13 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 // static
 const studentSchema = new Schema<TStudent, StudentModel>({
-  id: { type: Number, required: true, unique: true },
+  id: { type: Number, required: [true, 'Id is required'], unique: true },
+  password: {
+    type: String,
+    required: [true, 'password is required'],
+    unique: true,
+    maxlength: [20, 'Max length 20 Characters'],
+  },
   name: { type: usernameSchema, required: true },
   gender: {
     type: String,
@@ -92,6 +100,24 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     enum: ['active', 'blocked'],
     default: 'active',
   },
+});
+
+// moongoose middleware
+
+studentSchema.pre('save', async function (next) {
+  // password hashing
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_round),
+  );
+
+  next();
+});
+
+studentSchema.post('save', function () {
+  console.log(this, 'Data has been stored');
 });
 
 // static method

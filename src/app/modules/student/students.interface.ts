@@ -23,6 +23,7 @@ export interface TLocalGuardian {
 }
 export interface TStudent {
   id: number;
+  password: string;
   name: TUserName;
   gender: 'male' | 'female' | 'other';
   dateOfBirth: string;

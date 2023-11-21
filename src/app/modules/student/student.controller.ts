@@ -15,6 +15,7 @@ const createStudent = async (req: Request, res: Response) => {
     // validation using zod
 
     const parsedData = studentZodSchema.parse(studentData);
+
     const result = await studentServices.createStudent(parsedData);
 
     // if (error) {
