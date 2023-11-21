@@ -53,7 +53,8 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   contactNumber: { type: String },
   address: { type: String },
 });
-const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
+// static
+const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: Number, required: true, unique: true },
   name: { type: usernameSchema, required: true },
   gender: {
@@ -93,8 +94,56 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
   },
 });
 
-studentSchema.methods.userExists = async function (id: number) {
+// static method
+
+studentSchema.statics.userExists = async function (id: number) {
   const existingUser = await Student.findOne({ id: id });
   return existingUser;
 };
+
+// instance method
+// const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
+//   id: { type: Number, required: true, unique: true },
+//   name: { type: usernameSchema, required: true },
+//   gender: {
+//     type: String,
+//     enum: {
+//       values: ['male', 'female', 'other'],
+//       message: '{VALUE} is not valid',
+//     },
+//     required: true,
+//   },
+//   dateOfBirth: { type: String, required: true },
+//   email: {
+//     type: String,
+//     validate: {
+//       validator: (value: string) => validator.isEmail(value),
+//       message: 'Provide Valid Email Address',
+//     },
+//     required: true,
+//     unique: true,
+//   },
+//   contactNumber: { type: String, required: true },
+//   emergencyContact: { type: String, required: true },
+//   bloodgroup: {
+//     enum: {
+//       values: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-'],
+//     },
+//   },
+//   presentAddress: { type: String },
+//   permanentAddress: { type: String },
+//   guardian: { type: guadianSchema, required: true },
+//   localGuardian: { type: localGuardianSchema, required: true },
+//   profileImage: { type: String },
+//   isActive: {
+//     type: String,
+//     enum: ['active', 'blocked'],
+//     default: 'active',
+//   },
+// });
+// instance methods of mongoose
+// studentSchema.methods.userExists = async function (id: number) {
+//   const existingUser = await Student.findOne({ id: id });
+//   return existingUser;
+// };
 export const Student = model<TStudent, StudentModel>('student', studentSchema);
