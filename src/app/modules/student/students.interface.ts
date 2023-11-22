@@ -38,11 +38,12 @@ export interface TStudent {
   localGuardian: TLocalGuardian;
   profileImage?: string;
   isActive: 'active' | 'blocked';
+  isDeleted: boolean;
 }
 // creates a static
 
 export interface StudentModel extends Model<TStudent> {
-  userExists(id: number): Promise<TStudent | nul>;
+  userExists(id: number): Promise<TStudent | null>;
 }
 
 // creates an instance
