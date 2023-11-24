@@ -6,7 +6,7 @@ import {
   TGuardian,
   TLocalGuardian,
   TStudent,
-  StudentMethods,
+  // StudentMethods,
   StudentModel,
   TUserName,
 } from './students.interface';
@@ -86,11 +86,11 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     },
     contactNumber: { type: String, required: true },
     emergencyContact: { type: String, required: true },
-    bloodgroup: {
-      enum: {
-        values: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-'],
-      },
-    },
+    // bloodgroup: {
+    //   enum: {
+    //     values: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-'],
+    //   },
+    // },
     presentAddress: { type: String },
     permanentAddress: { type: String },
     guardian: { type: guadianSchema, required: true },
@@ -141,7 +141,7 @@ studentSchema.pre('findOne', function (next) {
 });
 
 studentSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { isDeleted: { $neq: true } } });
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });
 // static method
@@ -154,7 +154,7 @@ studentSchema.statics.userExists = async function (id: number) {
   return existingUser;
 };
 
-// virtuas
+// virtuals
 
 // instance method
 // const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({

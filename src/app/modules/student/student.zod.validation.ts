@@ -46,7 +46,7 @@ export const studentZodSchema = z.object({
   email: z.string().email(),
   contactNumber: z.string(),
   emergencyContact: z.string(),
-  bloodgroup: z.enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-']).optional(),
+  // bloodgroup: z.enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-']).optional(),
   presentAddress: z.string(),
   permanentAddress: z.string(),
   guardian: guardianSchema.required(),

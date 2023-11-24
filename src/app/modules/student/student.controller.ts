@@ -29,6 +29,7 @@ const createStudent = async (req: Request, res: Response) => {
       message: 'Student has been created successfully.',
       data: result,
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     res.status(500).json({
       success: false,
@@ -46,6 +47,7 @@ const getStudents = async (req: Request, res: Response) => {
       message: 'Students retrieved',
       result: result,
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     res.status(500).json({
       success: false,
@@ -58,12 +60,14 @@ const getStudents = async (req: Request, res: Response) => {
 const getStudentById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const result = await studentServices.getStudentById(id);
+
+    const result = await studentServices.getStudentById(Number(id));
     res.status(200).json({
       success: true,
       message: 'Result Retrieved',
       data: result,
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     res.status(500).json({
       success: false,
@@ -77,11 +81,14 @@ const deleteStudentById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const result = await studentServices.deleteStudentById(id);
-    res.status(200).json({
-      success: true,
-      message: 'Student Record Removed',
-      data: result,
-    });
+    if (result.modifiedCount) {
+      res.status(200).json({
+        success: true,
+        message: 'Student Record Removed',
+        data: null,
+      });
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     res.status(500).json({
       success: false,

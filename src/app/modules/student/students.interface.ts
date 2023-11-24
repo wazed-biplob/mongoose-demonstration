@@ -31,7 +31,7 @@ export interface TStudent {
   avatar?: string;
   contactNumber: string;
   emergencyContact: string;
-  bloodgroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-';
+  // bloodgroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-';
   presentAddress: string;
   permanentAddress: string;
   guardian: TGuardian;
@@ -43,6 +43,7 @@ export interface TStudent {
 // creates a static
 
 export interface StudentModel extends Model<TStudent> {
+  // eslint-disable-next-line no-unused-vars
   userExists(id: number): Promise<TStudent | null>;
 }
 
