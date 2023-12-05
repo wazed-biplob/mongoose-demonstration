@@ -5,6 +5,7 @@ import { TUSER } from './user.interface';
 import { User } from './user.model';
 
 const createStudent = async (password: string, studentData: TStudent) => {
+  console.log('studentData', studentData);
   // static
   //   if (await Student.userExists(studentData.id)) {
   //     throw new Error('User already registered');
@@ -19,8 +20,9 @@ const createStudent = async (password: string, studentData: TStudent) => {
   // set role
   userData.role = 'student';
   // manually generated id
-  userData.id = '20301412';
+  userData.id = '20301413';
   const newUser = await User.create(userData);
+
   // create a student
   if (Object.keys(newUser).length) {
     studentData.id = newUser.id;

@@ -37,4 +37,4 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
-export const User = model<TUSER>('netizens', userSchema);
+export const User = model<TUSER>('netizen', userSchema);
