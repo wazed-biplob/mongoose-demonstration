@@ -5,7 +5,6 @@ import { TUSER } from './user.interface';
 import { User } from './user.model';
 
 const createStudent = async (password: string, studentData: TStudent) => {
-  console.log('studentData', studentData);
   // static
   //   if (await Student.userExists(studentData.id)) {
   //     throw new Error('User already registered');

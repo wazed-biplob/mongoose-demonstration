@@ -37,21 +37,26 @@ const localGuardianSchema = z.object({
   address: z.string().optional(),
 });
 
-export const studentZodSchema = z.object({
-  id: z.number(),
-  name: usernameSchema.required(),
-  password: z.string().max(20),
-  gender: z.enum(['male', 'female', 'other']),
-  dateOfBirth: z.string(),
-  email: z.string().email(),
-  contactNumber: z.string(),
-  emergencyContact: z.string(),
-  // bloodgroup: z.enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-']).optional(),
-  presentAddress: z.string(),
-  permanentAddress: z.string(),
-  guardian: guardianSchema.required(),
-  localGuardian: localGuardianSchema.required(),
-  profileImage: z.string().optional(),
-  isActive: z.enum(['active', 'blocked']).default('active'),
-  isDeleted: z.boolean(),
+export const createStudentZodValidationSchema = z.object({
+  body: z.object({
+    password: z.string().max(20),
+    student: z.object({
+      name: usernameSchema.required(),
+      gender: z.enum(['male', 'female', 'other']),
+      dateOfBirth: z.date().optional(),
+      email: z.string().email(),
+      contactNumber: z.string(),
+      emergencyContact: z.string(),
+      // bloodgroup: z.enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-']).optional(),
+      presentAddress: z.string(),
+      permanentAddress: z.string(),
+      guardian: guardianSchema.required(),
+      localGuardian: localGuardianSchema.required(),
+      profileImage: z.string().optional(),
+    }),
+  }),
 });
+
+export const studentValidations = {
+  createStudentZodValidationSchema,
+};

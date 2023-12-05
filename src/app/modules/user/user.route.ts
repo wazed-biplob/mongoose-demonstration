@@ -1,12 +1,15 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import { userController } from './user.controller';
+
+import { createStudentZodValidationSchema } from '../student/student.zod.validation';
+import validateRequest from '../../middlewares/validateRequest';
 
 const router = express.Router();
 
-const validateRequest = (req: Request, res: Response, next: NextFunction) => {
-  next();
-};
-
-router.post('/create-student', validateRequest, userController.createStudent);
+router.post(
+  '/create-student',
+  validateRequest(createStudentZodValidationSchema),
+  userController.createStudent,
+);
 
 export const userRoutes = router;

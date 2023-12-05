@@ -11,6 +11,7 @@ import {
 } from './students.interface';
 
 import { User } from '../user/user.model';
+
 // import { optional } from 'joi';
 
 // mongoose
@@ -75,7 +76,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       },
       required: true,
     },
-    dateOfBirth: { type: String, required: true },
+    dateOfBirth: { type: Date, required: true },
     email: {
       type: String,
       validate: {
