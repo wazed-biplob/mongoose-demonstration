@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
-import bcrypt from 'bcrypt';
 
 import {
   TGuardian,
@@ -10,7 +9,8 @@ import {
   StudentModel,
   TUserName,
 } from './students.interface';
-import config from '../../config';
+
+import { User } from '../user/user.model';
 // import { optional } from 'joi';
 
 // mongoose
@@ -59,12 +59,13 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: { type: Number, required: [true, 'Id is required'], unique: true },
-    password: {
-      type: String,
-      required: [true, 'password is required'],
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'Id is required'],
       unique: true,
-      maxlength: [20, 'Max length 20 Characters'],
+      ref: User,
     },
+
     name: { type: usernameSchema, required: true },
     gender: {
       type: String,
@@ -96,11 +97,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     guardian: { type: guadianSchema, required: true },
     localGuardian: { type: localGuardianSchema, required: true },
     profileImage: { type: String },
-    isActive: {
-      type: String,
-      enum: ['active', 'blocked'],
-      default: 'active',
-    },
+
     isDeleted: { type: Boolean, default: false },
   },
   {
@@ -109,25 +106,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     },
   },
 );
-
-// moongoose middleware
-
-studentSchema.pre('save', async function (next) {
-  // password hashing
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_round),
-  );
-
-  next();
-});
-
-studentSchema.post('save', function (doc, next) {
-  doc.password = '';
-  next();
-});
 
 studentSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });

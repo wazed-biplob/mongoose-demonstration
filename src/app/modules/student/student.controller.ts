@@ -1,45 +1,10 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { studentServices } from './student.service';
-import { studentZodSchema } from './student.zod.validation';
+// import { studentZodSchema } from './student.zod.validation';
 
 // import { studentJoiSchema } from './studentschema';
 
-const createStudent = async (req: Request, res: Response) => {
-  try {
-    const { student: studentData } = req.body;
-
-    // validation using library
-    // const { error, value } = studentJoiSchema.validate(studentData);
-
-    // validation using zod
-
-    const parsedData = studentZodSchema.parse(studentData);
-
-    const result = await studentServices.createStudent(parsedData);
-
-    // if (error) {
-    //   res.status(400).json({
-    //     success: false,
-    //     message: 'Something went wrong!',
-    //     error: error.details,
-    //   });
-    // }
-    res.status(201).json({
-      success: true,
-      message: 'Student has been created successfully.',
-      data: result,
-    });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message,
-      error: `Error Message : ` + err,
-    });
-  }
-};
-
-const getStudents = async (req: Request, res: Response) => {
+const getStudents = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await studentServices.getStudents();
     res.status(200).json({
@@ -48,16 +13,21 @@ const getStudents = async (req: Request, res: Response) => {
       result: result,
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message,
-      error: `Error Message : ` + err,
-    });
+  } catch (err) {
+    // res.status(500).json({
+    //   success: false,
+    //   message: err.message,
+    //   error: `Error Message : ` + err,
+    // });
+    next(err);
   }
 };
 
-const getStudentById = async (req: Request, res: Response) => {
+const getStudentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
 
@@ -68,16 +38,21 @@ const getStudentById = async (req: Request, res: Response) => {
       data: result,
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message,
-      error: `Error Message : ` + err,
-    });
+  } catch (err) {
+    // res.status(500).json({
+    //   success: false,
+    //   message: err.message,
+    //   error: `Error Message : ` + err,
+    // });
+    next(err);
   }
 };
 
-const deleteStudentById = async (req: Request, res: Response) => {
+const deleteStudentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     const result = await studentServices.deleteStudentById(id);
@@ -89,17 +64,17 @@ const deleteStudentById = async (req: Request, res: Response) => {
       });
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message,
-      error: `Error Message : ` + err,
-    });
+  } catch (err) {
+    // res.status(500).json({
+    //   success: false,
+    //   message: err.message,
+    //   error: `Error Message : ` + err,
+    // });
+    next(err);
   }
 };
 
 export const studentController = {
-  createStudent,
   getStudents,
   getStudentById,
   deleteStudentById,
