@@ -5,7 +5,6 @@ import catchAsync from '../../utils/catchAsync';
 const createStudent = catchAsync(async (req, res) => {
   // try {
   const { password, student: studentData } = req.body;
-  console.log('req.body', req.body);
 
   // validation using library
   // const { error, value } = studentJoiSchema.validate(studentData);
@@ -15,7 +14,6 @@ const createStudent = catchAsync(async (req, res) => {
   // const parsedData = studentZodSchema.parse(studentData);
 
   const result = await userService.createStudent(password, studentData);
-  console.log('result', result);
 
   // if (error) {
   //   res.status(400).json({

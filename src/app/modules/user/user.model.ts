@@ -4,7 +4,7 @@ import config from '../../config';
 import bcrypt from 'bcrypt';
 const userSchema = new Schema<TUSER>(
   {
-    id: { type: String, required: true },
+    id: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     needsPasswordChange: { type: Boolean, default: true },
     role: { type: String, enum: ['admin', 'student', 'faculty'] },
@@ -37,4 +37,4 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
-export const User = model<TUSER>('netizen', userSchema);
+export const User = model<TUSER>('user', userSchema);
