@@ -98,8 +98,15 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     guardian: { type: guadianSchema, required: true },
     localGuardian: { type: localGuardianSchema, required: true },
     profileImage: { type: String },
-    admissionSemestre: { type: Schema.Types.ObjectId, ref: 'AcademicSemestre' },
+    admissionSemestre: {
+      type: Schema.Types.ObjectId,
+      ref: 'AdmissionSemestre',
+    },
     isDeleted: { type: Boolean, default: false },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicDepartment',
+    },
   },
   {
     toJSON: {

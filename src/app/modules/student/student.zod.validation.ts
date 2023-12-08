@@ -54,10 +54,58 @@ export const createStudentZodValidationSchema = z.object({
       localGuardian: localGuardianSchema.required(),
       admissionSemestre: z.string(),
       profileImage: z.string().optional(),
+      academicDepartment: z.string(),
+    }),
+  }),
+});
+
+const updateUsernameSchema = z.object({
+  fName: z
+    .string()
+    .max(20)
+    .refine(
+      (value) => {
+        const fName =
+          value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        return fName === value;
+      },
+      {
+        message: 'First Name should be written correctly',
+      },
+    )
+    .optional(),
+  middleName: z.string().optional(),
+  lname: z
+    .string()
+    .refine((value) => validator.isAlpha(value), {
+      message: 'No Number Allowed',
+    })
+    .optional(),
+});
+
+export const updateStudentZodValidationSchema = z.object({
+  body: z.object({
+    password: z.string().max(20).optional(),
+    student: z.object({
+      name: updateUsernameSchema.optional(),
+      gender: z.enum(['male', 'female', 'other']).optional(),
+      dateOfBirth: z.string().optional(),
+      email: z.string().email().optional(),
+      contactNumber: z.string().optional(),
+      emergencyContact: z.string().optional(),
+      // bloodgroup: z.enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-']).optional(),
+      presentAddress: z.string().optional(),
+      permanentAddress: z.string().optional(),
+      guardian: guardianSchema.optional(),
+      localGuardian: localGuardianSchema.optional(),
+      admissionSemestre: z.string().optional(),
+      profileImage: z.string().optional(),
+      academicDepartment: z.string().optional(),
     }),
   }),
 });
 
 export const studentValidations = {
   createStudentZodValidationSchema,
+  updateStudentZodValidationSchema,
 };

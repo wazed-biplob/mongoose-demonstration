@@ -40,6 +40,7 @@ export interface TStudent {
   profileImage?: string;
   admissionSemestre: Types.ObjectId;
   isDeleted: boolean;
+  academicDepartment: Types.ObjectId;
 }
 // creates a static
 

@@ -47,11 +47,11 @@ const deleteStudentById = catchAsync(async (req, res) => {
   // try {
   const { id } = req.params;
   const result = await studentServices.deleteStudentById(id);
-  if (result.modifiedCount) {
+  if (result) {
     res.status(200).json({
       success: true,
       message: 'Student Record Removed',
-      data: null,
+      data: result,
     });
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -65,8 +65,22 @@ const deleteStudentById = catchAsync(async (req, res) => {
   // }
 });
 
+const updateStudentById = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { student } = req.body;
+  const result = await studentServices.updateStudentById(Number(id), student);
+  if (result) {
+    res.status(200).json({
+      success: true,
+      message: 'Student Record Updated',
+      data: result,
+    });
+  }
+});
+
 export const studentController = {
   getStudents,
   getStudentById,
   deleteStudentById,
+  updateStudentById,
 };

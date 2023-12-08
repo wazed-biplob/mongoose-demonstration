@@ -12,7 +12,7 @@ router.post(
 );
 // calls controller
 
-// router.get('/', studentController.getStudents);
+router.get('/', academicSemestreController.getAcademicSemestres);
 // router.get('/:id', studentController.getStudentById);
 // router.delete('/:id', studentController.deleteStudentById);
 export const academicSemestreRoutes = router;
