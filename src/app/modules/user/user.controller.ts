@@ -31,7 +31,7 @@ const createStudent = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'Student Created Successfully',
+    message: 'New Student Created Successfully',
     data: result,
   });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -132,7 +132,8 @@ studentSchema.pre('aggregate', function (next) {
 });
 // static method
 studentSchema.virtual('fullName').get(function () {
-  return `${this.name.fName} ${this.name?.middleName || ''} ${this.name.lname}`;
+  return `${this?.name?.fName} ${this?.name?.middleName || ''} ${this?.name
+    ?.lname}`;
 });
 
 studentSchema.statics.userExists = async function (id: number) {

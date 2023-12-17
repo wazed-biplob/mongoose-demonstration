@@ -39,7 +39,7 @@ const createStudent = async (password: string, payload: TStudent) => {
     );
     // T-1
     const newUser = await User.create([userData], { session });
-
+    console.log({ newUser: newUser });
     // create a student
     if (!newUser.length) {
       throw new appError(httpStatus.BAD_REQUEST, 'Failed to create user');
@@ -47,6 +47,7 @@ const createStudent = async (password: string, payload: TStudent) => {
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; // reference id
     // T-2
+
     const newStudent = await Student.create([payload], { session });
 
     if (!newStudent) {
@@ -58,6 +59,7 @@ const createStudent = async (password: string, payload: TStudent) => {
   } catch (err) {
     await session.abortTransaction();
     await session.endSession();
+    console.log('error');
   }
 
   // creates an instance

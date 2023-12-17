@@ -10,8 +10,8 @@ app.use(cors());
 // app routes
 app.use('/api/v1', router);
 
-const getController = async (req: Request, res: Response) => {
-  Promise.reject();
+const getController = (req: Request, res: Response) => {
+  res.json({ name: 'OK' });
 };
 app.get('/', getController);
 
