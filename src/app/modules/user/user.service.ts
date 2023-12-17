@@ -48,6 +48,7 @@ const createStudent = async (password: string, payload: TStudent) => {
     payload.user = newUser[0]._id; // reference id
     // T-2
     const newStudent = await Student.create([payload], { session });
+
     if (!newStudent) {
       throw new appError(httpStatus.BAD_REQUEST, 'Failed to create Student');
     }
