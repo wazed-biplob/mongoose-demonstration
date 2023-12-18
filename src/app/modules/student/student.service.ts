@@ -5,61 +5,73 @@ import httpStatus from 'http-status';
 import { appError } from '../../errors/appError';
 import { User } from '../user/user.model';
 import { TStudent } from './students.interface';
+import { QueryBuilder } from '../../builder/queryBuilder';
+import { studentSearchFields } from './student.constant';
 
 // import { TStudent } from './students.interface';
 
 const getStudents = async (query: Record<string, unknown>) => {
-  const studentSearchFields = ['name', 'name.fName', 'email'];
-  const queryObj = { ...query };
-  let searchTerm = '';
-  if (query?.searchTerm) {
-    searchTerm = query.searchTerm as string;
-  }
-  const excludedFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-  excludedFields.forEach((el) => delete queryObj[el]);
-  const searchQuery = Student.find({
-    $or: studentSearchFields.map((field) => ({
-      [field]: new RegExp(searchTerm, 'i'),
-    })),
-  });
-  const filterQuery = searchQuery
-    .find(queryObj)
-    .populate({
+  const studentQuery = new QueryBuilder(
+    Student.find().populate({
       path: 'academicDepartment',
       populate: {
         path: 'academicFaculty',
       },
-    })
-    .populate('admissionSemestre');
-  let sort = '-createdAt';
-  if (query?.sort) {
-    sort = query.sort as string;
-  }
-  const sortQuery = filterQuery.sort(sort);
-  let page = 1;
-  let limit = 1;
-  let skip = 0;
-  if (query?.limit) {
-    limit = Number(query.limit);
-  }
+    }),
+    query,
+  )
+    .search(studentSearchFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-  if (query?.page) {
-    page = Number(query.page);
-    skip = (page - 1) * limit;
-  }
-  const paginateQuery = sortQuery.skip(skip);
-  if (query?.limit) {
-    limit = query.limit as number;
-  }
-  const limitQuery = paginateQuery.limit(limit);
+  const result = await studentQuery.modelQuery;
+  return result;
 
-  let fields = '-__V';
-  if (query?.fields) {
-    fields = (query.fields as string).split(',').join(' ');
-  }
+  // const queryObj = { ...query };
+  // let searchTerm = '';
+  // if (query?.searchTerm) {
+  //   searchTerm = query.searchTerm as string;
+  // };
+  // const excludedFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+  // excludedFields.forEach((el) => delete queryObj[el]);
+  // const searchQuery = Student.find({
+  //   $or: studentSearchFields.map((field) => ({
+  //     [field]: new RegExp(searchTerm, 'i'),
+  //   })),
+  // });
+  // const filterQuery = searchQuery
+  //   .find(queryObj)
+  //
+  //   .populate('admissionSemestre');
 
-  const fieldQuery = await limitQuery.select(fields);
-  return fieldQuery;
+  // if (query?.sort) {
+  //   sort = query.sort as string;
+  // }
+  // const sortQuery = filterQuery.sort(sort);
+
+  // if (query?.limit) {
+  //   limit = Number(query.limit);
+  // }
+
+  // if (query?.page) {
+  //   page = Number(query.page);
+  //   skip = (page - 1) * limit;
+  // }
+  // const paginateQuery = sortQuery.skip(skip);
+  // if (query?.limit) {
+  //   limit = query.limit as number;
+  // }
+  // const limitQuery = paginateQuery.limit(limit);
+
+  // let fields = '-__V';
+  // if (query?.fields) {
+  //   fields = (query.fields as string).split(',').join(' ');
+  // }
+
+  //   const fieldQuery = await limitQuery.select(fields);
+  //   return fieldQuery;
 };
 
 const getStudentById = async (id: number) => {
