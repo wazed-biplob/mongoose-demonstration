@@ -26,7 +26,7 @@ const getStudents = catchAsync(async (req, res) => {
 const getStudentById = catchAsync(async (req, res) => {
   const { id } = req.params;
 
-  const result = await studentServices.getStudentById(Number(id));
+  const result = await studentServices.getStudentById(id);
   res.status(200).json({
     success: true,
     message: 'Result Retrieved',
@@ -68,7 +68,7 @@ const deleteStudentById = catchAsync(async (req, res) => {
 const updateStudentById = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { student } = req.body;
-  const result = await studentServices.updateStudentById(Number(id), student);
+  const result = await studentServices.updateStudentById(id as string, student);
   if (result) {
     res.status(200).json({
       success: true,
