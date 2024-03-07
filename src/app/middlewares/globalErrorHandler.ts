@@ -3,13 +3,13 @@
 /* eslint-disable no-unused-vars */
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import { ZodEffects, ZodError, ZodIssue } from 'zod';
-import { TErrorSource } from '../interface/error';
 import config from '../config';
 import { zodErrorHandler } from '../errors/zodError';
 import { validationErrorHandler } from '../errors/validationError';
 import { castErrorHandler } from '../errors/castError';
 import { duplicateErrorHandler } from '../errors/duplicateError';
 import { appError } from '../errors/appError';
+import { TErrorSource } from '../interface/error';
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = 500;

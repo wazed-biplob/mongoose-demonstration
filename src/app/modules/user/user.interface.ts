@@ -1,3 +1,7 @@
+/* eslint-disable no-unused-vars */
+import { Model } from 'mongoose';
+import { USER_ROLE } from './user.constant';
+
 export interface TUSER {
   id: string;
   password: string;
@@ -12,3 +16,14 @@ export interface NewUser {
   role: string;
   id: string;
 }
+
+export interface UserModel extends Model<TUSER> {
+  userExistByCustomId(id: string): Promise<TUSER>;
+
+  passwordMatched(
+    plainPassword: string,
+    encryptedPassword: string,
+  ): Promise<boolean>;
+}
+
+export type IUserRole = keyof typeof USER_ROLE;

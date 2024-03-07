@@ -5,6 +5,7 @@ import { academicSemestreRoutes } from '../modules/academicSemestre/academicSeme
 import { academicFacultyRoutes } from '../modules/academicFaculty/academicFaculty.route';
 import { academicDepartmentRoutes } from '../modules/academicDepartment/academicDepartment.route';
 import { courseRoutes } from '../modules/course/course.route';
+import { authRoutes } from '../modules/Auth/auth.route';
 
 const router = Router();
 
@@ -27,6 +28,7 @@ const moduleRoutes = [
   },
   { path: '/academic-departments', route: academicDepartmentRoutes },
   { path: '/courses', route: courseRoutes },
+  { path: '/auth/', route: authRoutes },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 export default router;

@@ -1,11 +1,12 @@
 import { Schema, model } from 'mongoose';
-import { TUSER } from './user.interface';
+import { TUSER, UserModel } from './user.interface';
 import config from '../../config';
 import bcrypt from 'bcrypt';
-const userSchema = new Schema<TUSER>(
+
+const userSchema = new Schema<TUSER, UserModel>(
   {
     id: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: 0 },
     needsPasswordChange: { type: Boolean, default: true },
     role: { type: String, enum: ['admin', 'student', 'faculty'] },
     status: {
@@ -24,6 +25,7 @@ userSchema.pre('save', async function (next) {
   // password hashing
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
+
   user.password = await bcrypt.hash(
     user.password,
     Number(config.bcrypt_salt_round),
@@ -37,4 +39,15 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
-export const User = model<TUSER>('user', userSchema);
+userSchema.statics.userExistByCustomId = async function (id: string) {
+  return await User.findOne({ id }).select('+password');
+};
+
+userSchema.statics.passwordMatched = async function (
+  plainPassword,
+  hashedPassword,
+) {
+  return await bcrypt.compare(plainPassword, hashedPassword);
+};
+
+export const User = model<TUSER, UserModel>('User', userSchema);

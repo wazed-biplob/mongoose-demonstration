@@ -6,6 +6,7 @@ import {
   updateAcademicFacultyValidationSchema,
 } from './academicFaculty.validation';
 import { academicFacultyController } from './academicFaculty.controller';
+import auth from '../../middlewares/auth';
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.get(
   academicFacultyController.getSingleAcademicFaculty,
 );
 
-router.get('/', academicFacultyController.getAllAcademicFaculty);
+router.get('/', auth(), academicFacultyController.getAllAcademicFaculty);
 
 router.patch(
   '/:facultyId',

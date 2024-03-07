@@ -3,6 +3,7 @@ import express, { Application, Request, Response } from 'express';
 import errorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
 import router from './app/routes';
+
 const app: Application = express();
 
 app.use(express.json());

@@ -21,7 +21,7 @@ const createStudent = async (password: string, payload: TStudent) => {
   // create a user Model
   const userData: Partial<TUSER> = {};
   // use default pass if pass is not set
-  userData.password = userData.password || (config.default_pass as string);
+  userData.password = password || (config.default_pass as string);
   // set role
   userData.role = 'student';
   // manually generated id
@@ -37,6 +37,7 @@ const createStudent = async (password: string, payload: TStudent) => {
     userData.id = await generateStudentId(
       admissionSemestre as TAcademicSemestre,
     );
+
     // T-1
     const newUser = await User.create([userData], { session });
 
@@ -59,6 +60,7 @@ const createStudent = async (password: string, payload: TStudent) => {
   } catch (err) {
     await session.abortTransaction();
     await session.endSession();
+    console.log(err);
   }
 
   // creates an instance
