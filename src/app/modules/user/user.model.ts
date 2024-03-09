@@ -7,6 +7,9 @@ const userSchema = new Schema<TUSER, UserModel>(
   {
     id: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: 0 },
+    passwordChangedAt: {
+      type: Date,
+    },
     needsPasswordChange: { type: Boolean, default: true },
     role: { type: String, enum: ['admin', 'student', 'faculty'] },
     status: {
@@ -48,6 +51,15 @@ userSchema.statics.passwordMatched = async function (
   hashedPassword,
 ) {
   return await bcrypt.compare(plainPassword, hashedPassword);
+};
+
+userSchema.statics.isIATBeforePasswordChange = function (
+  passwordChangedAt: Date,
+  iatTimeStamp: number,
+) {
+  const passwordChangedAtTimestamp =
+    new Date(passwordChangedAt).getTime() / 1000;
+  return passwordChangedAtTimestamp > iatTimeStamp;
 };
 
 export const User = model<TUSER, UserModel>('User', userSchema);

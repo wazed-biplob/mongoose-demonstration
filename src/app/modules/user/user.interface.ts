@@ -6,6 +6,7 @@ export interface TUSER {
   id: string;
   password: string;
   needsPasswordChange: boolean;
+  passwordChangedAt?: Date;
   role: 'admin' | 'student' | 'faculty';
   status: 'in-progress' | 'blocked';
   isDeleted: boolean;
@@ -24,6 +25,10 @@ export interface UserModel extends Model<TUSER> {
     plainPassword: string,
     encryptedPassword: string,
   ): Promise<boolean>;
+  isIATBeforePasswordChange(
+    passwordChangeTimestamp: Date,
+    iatTimeStamp: number,
+  ): boolean;
 }
 
 export type IUserRole = keyof typeof USER_ROLE;

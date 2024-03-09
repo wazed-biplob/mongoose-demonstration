@@ -8,17 +8,11 @@ import bcrypt from 'bcrypt';
 const loginUser = async (payload: TLoginUser) => {
   const user = await User.userExistByCustomId(payload.id);
 
-  const isDeleted = user?.isDeleted;
-  if (!user || isDeleted || user?.status === 'blocked') {
-    throw new appError(
-      httpStatus.NOT_FOUND,
-      'User Does not exist or has been deleted or is blocked',
-    );
-  }
   const jwtPayload = {
     userId: user.id,
     role: user.role,
   };
+
   const jsonAccessToken = jwt.sign(
     { jwtPayload },
     config.jwt_access_token as string,
@@ -74,6 +68,7 @@ const changePassword = async (
       {
         password: hash,
         needsPasswordChange: false,
+        passwordChangedAt: new Date(),
       },
     );
     return result;
